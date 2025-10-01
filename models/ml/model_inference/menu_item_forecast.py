@@ -1,7 +1,13 @@
 import snowflake.snowpark.functions as F
+import logging
 
+logger = logging.getLogger('snowflake.snowpark.session')
+logger.setLevel(logging.INFO)
 
 def model(dbt, session):
+    
+    my_value = dbt.config.get('my_key')
+    logger.info(f"my_value: {my_value}")
 
     df_future_dates = dbt.ref("get_sales_short_term_trends")
 

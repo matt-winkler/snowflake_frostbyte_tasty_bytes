@@ -7,7 +7,7 @@ import json
 
 def model(dbt, session):
      
-    session.add_packages("scikit-learn")
+    #session.add_packages("scikit-learn")
     dbt.config(packages=["pandas"])
 
     def train_xgboost(
