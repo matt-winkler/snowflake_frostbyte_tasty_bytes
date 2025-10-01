@@ -6,7 +6,8 @@ import pandas as pd
 import json
 
 def model(dbt, session):
-
+     
+    session.add_packages("scikit-learn")
     dbt.config(packages=["pandas"])
 
     def train_xgboost(
@@ -69,7 +70,7 @@ def model(dbt, session):
         is_permanent=True,
         replace=True,
         stage_location="@FORECAST_STAGE",
-        packages=["snowflake-snowpark-python", "xgboost", "joblib"]
+        packages=["snowflake-snowpark-python", "xgboost", "joblib", "scikit-learn"]
     )
 
     # Call the training stored procedure

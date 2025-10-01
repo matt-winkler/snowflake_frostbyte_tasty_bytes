@@ -1,7 +1,8 @@
 {{
     config(
         materialized = "table",
-        transient = false
+        transient = false,
+        sql_header = "alter warehouse MATT_W_DEV_WH set warehouse_size = 'X-Large';"
     )
 }}
 
