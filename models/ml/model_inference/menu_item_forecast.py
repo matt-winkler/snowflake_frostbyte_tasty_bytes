@@ -1,13 +1,37 @@
 import snowflake.snowpark.functions as F
+from snowflake.snowpark import Session
 import logging
 
 logger = logging.getLogger('snowflake.snowpark.session')
 logger.setLevel(logging.INFO)
 
 def model(dbt, session):
+    #dbt.config(packages=["snowflake-ml-python"])
+    # def write_to_feature_store(
+    #     session: Session
+    # ) -> None:
+    #     from snowflake.ml.feature_store import FeatureStore, CreationMode, Entity
+
+    #     fs = FeatureStore(
+    #         session=session,
+    #         database="MATT_W_ANALYTICS_DEV",
+    #         name="dbt_mwinkler_ml_feature_store",
+    #         default_warehouse="SNOWFLAKE_LEARNING_WH",
+    #         creation_mode=CreationMode.CREATE_IF_NOT_EXIST
+    #     )
     
-    my_value = dbt.config.get('my_key')
-    logger.info(f"my_value: {my_value}")
+    # write_to_feature_store_snowflake = session.sproc.register(
+    #     func=write_to_feature_store,
+    #     name="sproc_write_to_feature_store",
+    #     is_permanent=True,
+    #     replace=True,
+    #     stage_location="@FORECAST_STAGE",
+    #     packages=["snowflake-ml-python"]
+    # )
+
+    # feature_store_result = write_to_feature_store_snowflake(
+    #     session
+    # )
 
     df_future_dates = dbt.ref("get_sales_short_term_trends")
 
