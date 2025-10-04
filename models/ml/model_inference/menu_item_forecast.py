@@ -1,5 +1,5 @@
+import pandas as pd
 import snowflake.snowpark.functions as F
-from snowflake.snowpark import Session
 import logging
 
 logger = logging.getLogger('snowflake.snowpark.session')
@@ -7,18 +7,30 @@ logger.setLevel(logging.INFO)
 
 def model(dbt, session):
     #dbt.config(packages=["snowflake-ml-python"])
-    # def write_to_feature_store(
-    #     session: Session
-    # ) -> None:
-    #     from snowflake.ml.feature_store import FeatureStore, CreationMode, Entity
+    
+    def write_to_feature_store(
+        x: int
+    ) -> None:
+        from snowflake.ml.feature_store import FeatureStore, CreationMode, Entity
 
-    #     fs = FeatureStore(
-    #         session=session,
-    #         database="MATT_W_ANALYTICS_DEV",
-    #         name="dbt_mwinkler_ml_feature_store",
-    #         default_warehouse="SNOWFLAKE_LEARNING_WH",
-    #         creation_mode=CreationMode.CREATE_IF_NOT_EXIST
-    #     )
+        fs = FeatureStore(
+            session=session,
+            database="MATT_W_ANALYTICS_DEV",
+            name="dbt_mwinkler_ml_feature_store",
+            default_warehouse="SNOWFLAKE_LEARNING_WH",
+            creation_mode=CreationMode.CREATE_IF_NOT_EXIST
+        )
+
+    session.udf.register(
+        func=write_to_feature_store,
+        name="udf_write_to_feature_store",
+        stage_location="@FORECAST_STAGE",
+        input_types=[int],
+        return_type=None,
+        replace=True,
+        is_permanent=True,
+        packages=["snowflake-ml-python"]
+    )
     
     # write_to_feature_store_snowflake = session.sproc.register(
     #     func=write_to_feature_store,
@@ -29,9 +41,7 @@ def model(dbt, session):
     #     packages=["snowflake-ml-python"]
     # )
 
-    # feature_store_result = write_to_feature_store_snowflake(
-    #     session
-    # )
+    feature_store_result = F.call_udf("udf_write_to_feature_store", None)
 
     df_future_dates = dbt.ref("get_sales_short_term_trends")
 
