@@ -8,8 +8,13 @@ logger.setLevel(logging.INFO)
 
 def model(dbt, session):
 
-    write_to_feature_store_snowflake(
-        session
+    session.call(
+        "snowflake_ml__create_entity", 
+        "MATT_W_ANALYTICS_DEV",
+        "dbt_mwinkler_ml_feature_store",
+        "MATT_W_DEV_WH",
+        "menu_items",
+        "menu_item_id"
     )
 
     df_future_dates = dbt.ref("get_sales_short_term_trends")
