@@ -7,11 +7,12 @@ logger = logging.getLogger('snowflake.snowpark.session')
 logger.setLevel(logging.INFO)
 
 def model(dbt, session):
-
+    
+    # example of calling the sproc defined in snowflake_ml_utils.py to create a new entity
     session.call(
-        "snowflake_ml__create_entity", 
+        "snowflake_ml__register_entity", 
         "MATT_W_ANALYTICS_DEV",
-        "dbt_mwinkler_ml_feature_store",
+        "dbt_mwinkler_ml_feature_store_test",
         "MATT_W_DEV_WH",
         "menu_items",
         "menu_item_id"

@@ -8,7 +8,7 @@ logger.setLevel(logging.INFO)
 
 def model(dbt, session):
     
-    def create_entity(
+    def register_entity(
         session: Session,
         database: str,
         feature_store_name: str,
@@ -36,13 +36,15 @@ def model(dbt, session):
 
         fs.register_entity(e)
     
+    # put other snowflake-ml-python related capabilities in this section
     def create_feature_view(
     ) -> None:
         pass
         
-    create_entity_snowflake = session.sproc.register(
-        func=create_entity,
-        name="snowflake_ml__create_entity",
+    # this creates the stored procedure in snowflake
+    register_entity_snowflake = session.sproc.register(
+        func=register_entity,
+        name="snowflake_ml__register_entity",
         is_permanent=True,
         replace=True,
         stage_location="@FORECAST_STAGE",
@@ -50,4 +52,5 @@ def model(dbt, session):
         execute_as='caller'
     )
     
+    # dbt python models require a dataframe as the return object
     return  pd.DataFrame.from_dict({'id': [1]})
